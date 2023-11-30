@@ -25,11 +25,11 @@
                         <br>
 
                         <p class="py-6">Browse the entire collection. Click the theme to filter by themes such as:
-                        <!-- <div class="flex justify-center mt-4"> -->
-                            <a href="/lego/sets?theme=technic" class="btn btn-primary mx-2">Technic</a>
+                            <!-- <div class="flex justify-center mt-4"> -->
+                            <a href="/lego/sets?theme=technic" class="btn btn-primary mx-2" style="margin: 10px;" >Technic</a>
                             <a href="/lego/sets?theme=classic town" class="btn btn-primary mx-2">Classic Town</a>
                             <a href="/lego/sets?theme=supplemental" class="btn btn-primary mx-2">Supplemental</a>
-                        <!-- </div> -->
+                            <!-- </div> -->
                         </p>
                     </div>
                 </div>
@@ -51,8 +51,8 @@
                             <td>
                                 <%= set.name %>
                                     <span>|</span>
-                                    <a href="/lego/sets?theme=<%= set.theme %>" class="btn  mt-2 btn-xs">
-                                        <%= set.theme %>
+                                    <a href="/lego/sets?theme=<%= set.Theme.name %>" class="btn  mt-2 btn-xs">
+                                        <%= set.Theme.name %>
                                     </a>
                             </td>
                             <td>
