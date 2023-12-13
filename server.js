@@ -8,17 +8,16 @@
  *
  *  Name: Farhan Sarang Student ID: 172963217 Date: 11/12/2023
  *
- *  Published URL: 
+ *  Published URL:
  *
  ********************************************************************************/
 
+const express = require("express");
+const path = require("path");
 const legoData = require("./modules/legoSets");
 const authData = require("./modules/auth-service");
 const clientSessions = require("client-sessions");
 
-// const path = require("path");
-
-const express = require("express");
 const app = express();
 
 const HTTP_PORT = process.env.PORT || 8080;
@@ -159,39 +158,34 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
-app.post("/register", async (req, res) => {
-  try {
-    await authData.registerUser(req.body); // Register a new user with the provided data
-    res.render("register", { successMessage: "User created" });
-  } catch (err) {
-    res.render("register", {
-      errorMessage: err,
-      userName: req.body.userName,
-    });
-  }
+app.post("/register", (req, res) => {
+  authData
+    .registerUser(req.body)
+    .then(() => res.render("register", { successMessage: "User created" }))
+    .catch((err) =>
+      res.render("register", { errorMessage: err, userName: req.body.userName })
+    );
 });
 
-app.post("/login", async (req, res) => {
-  try {
-    req.body.userAgent = req.get("User-Agent"); // Set the User-Agent from request to body
-    const user = await authData.checkUser(req.body); // Check user credentials
-
-    req.session.user = {
-      userName: user.userName,
-      email: user.email,
-      loginHistory: user.loginHistory,
-    };
-    res.redirect("/lego/sets");
-  } catch (err) {
-    res.render("login", {
-      errorMessage: err,
-      userName: req.body.userName,
+app.post("/login", (req, res) => {
+  req.body.userAgent = req.get("User-Agent");
+  authData
+    .checkUser(req.body)
+    .then((user) => {
+      req.session.user = {
+        userName: user.userName,
+        email: user.email,
+        loginHistory: user.loginHistory,
+      };
+      res.redirect("/lego/sets");
+    })
+    .catch((err) => {
+      res.render("login", { errorMessage: err, userName: req.body.userName });
     });
-  }
 });
 
 app.get("/logout", (req, res) => {
-  req.session.reset(); // Reset the session
+  req.session.reset();
   res.redirect("/");
 });
 
